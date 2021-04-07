@@ -1,0 +1,113 @@
+@import 'antd/dist/antd.css';
+
+body {
+  background-color: #1B2259;
+}
+
+.content {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.all-view {
+  height: 100vh;
+}
+
+.box {
+  background-color: white;
+  border-radius: 15px;
+  padding: 50px;
+}
+
+.content-table {
+  overflow: scroll;
+}
+
+.contacts-list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.contacts-list thead {
+  background-color: #1890FF;
+  text-transform: uppercase;
+  color: white;
+  text-align: center;
+}
+
+.contacts-list thead th {
+  padding: 10px 10px;
+}
+
+.contacts-list tbody td {
+  padding: 5px;
+}
+
+.contacts-list tbody td:nth-child(6) {
+  text-align: center;
+  font-size: 20px;
+}
+
+.important {
+  color: #FF4D4F;
+}
+
+.input {
+  border-radius: 10px;
+}
+
+.btn-table {
+  background-color: transparent;
+  border: none;
+}
+
+.btn-table:hover {
+  cursor: pointer;
+}
+
+.btn-table:focus {
+  outline: none;
+}
+
+.btn-add {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  border: none;
+  background-color: #1890FF;
+  color: white;
+  border-radius: 20px;
+  padding: 5px;
+  width: 20%;
+}
+
+.btn-primary:hover {
+  cursor: pointer;
+}
+
+.btn-primary:focus {
+  outline: none;
+}
+
+.btn-back {
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+}
+
+.btn-back:hover {
+  cursor: pointer;
+}
+
+.btn-back:focus {
+  outline: none;
+}
