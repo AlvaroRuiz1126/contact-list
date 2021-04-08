@@ -4,6 +4,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useHistory, useParams } from 'react-router';
 import { usersServices } from '../services/userAPI';
 import { UserContext } from '../context/UserContext';
+import Swal from 'sweetalert2';
 
 const layout = {
   labelCol: {
@@ -33,12 +34,11 @@ const UserEditScreen = () => {
   const history = useHistory();
   const user = users.filter(user => user.id === id);
 
-  const onFinish = (values) => {
-    const { nombre, apellido, correo, cedula, telefono } = values;
-    console.log("Success:", values);
-    setForm({ nombre, apellido, correo, cedula, telefono });
-
-    usersServices(id, form, "PUT").then(resp => console.log(resp));
+  const handleInputChange = ({target}) => {
+    setForm({
+      ...form,
+      [target.name]: target.value
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -48,109 +48,125 @@ const UserEditScreen = () => {
   const handleBack = () => {
     history.push("/");
   };
+
+  const handleSubmit = (e) => {
+    usersServices(id, form, "PUT").then(resp => {
+      if(resp.ok){
+        Swal.fire('Hecho!', resp.msg, 'success')
+      }else{
+        Swal.fire('Error!', resp.msg, 'error')
+      }
+    });
+  };
   
   return (
     <>
-    {user.length > 0 && (
-      user.map(field => 
+      {user.length > 0 &&
+        user.map((field) => (
+          <div className="box">
+            <div>
+              <button className="btn-back" onClick={handleBack}>
+                <ArrowLeftOutlined />
+              </button>
+            </div>
+            <h2 style={{ textAlign: "center" }}>Editar usuario</h2>
+            <p>
+              Los campos con <span className="important">*</span> estan marcados
+              como obligatorios
+            </p>
 
-      <div className="box">
-        <div><button className="btn-back" onClick={handleBack}><ArrowLeftOutlined /></button></div>
-        <h2 style={{ textAlign: "center" }}>Editar usuario</h2>
-        <p>
-          Los campos con <span className="important">*</span> estan marcados
-          como obligatorios
-        </p>
+            <Form
+              {...layout}
+              name="basic"
+              initialValues={{
+                nombre: field.nombre,
+                apellido: field.apellido,
+                cedula: field.cedula,
+                correo: field.correo,
+                telefono: field.telefono,
+              }}
+              //onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+            >
+              <Form.Item
+                label="Nombre"
+                name="nombre"
+                rules={[
+                  {
+                    required: true,
+                    message: "Ingrese su nombre",
+                  },
+                ]}
+              >
+                <Input className="input" onChange={handleInputChange} value={form.nombre} name="nombre" />
+              </Form.Item>
 
-        <Form
-          {...layout}
-          name="basic"
-          initialValues={{
-            'nombre': field.nombre,
-            'apellido': field.apellido,
-            'cedula': field.cedula,
-            'correo': field.correo,
-            'telefono': field.telefono
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          <Form.Item
-            label="Nombre"
-            name="nombre"
-            rules={[
-              {
-                required: true,
-                message: "Ingrese su nombre",
-              },
-            ]}
-          >
-            <Input className="input" />
-          </Form.Item>
+              <Form.Item
+                label="Apellido"
+                name="apellido"
+                rules={[
+                  {
+                    required: true,
+                    message: "Ingrese su apellido",
+                  },
+                ]}
+              >
+                <Input className="input" onChange={handleInputChange} value={form.apellido} name="apellido" />
+              </Form.Item>
 
-          <Form.Item
-            label="Apellido"
-            name="apellido"
-            rules={[
-              {
-                required: true,
-                message: "Ingrese su apellido",
-              },
-            ]}
-          >
-            <Input className="input" />
-          </Form.Item>
+              <Form.Item
+                label="Cédula"
+                name="cedula"
+                rules={[
+                  {
+                    required: true,
+                    message: "Ingrese su número de cédula",
+                  },
+                ]}
+              >
+                <Input className="input" type="number" onChange={handleInputChange} value={form.cedula} name="cedula" />
+              </Form.Item>
 
-          <Form.Item
-            label="Cédula"
-            name="cedula"
-            rules={[
-              {
-                required: true,
-                message: "Ingrese su número de cédula",
-              },
-            ]}
-          >
-            <Input className="input" />
-          </Form.Item>
+              <Form.Item
+                name="correo"
+                label="Correo"
+                rules={[
+                  {
+                    type: "email",
+                    required: true,
+                    message: "Ingrese un correo electrónico válido",
+                  },
+                ]}
+              >
+                <Input className="input" type="email" onChange={handleInputChange} value={form.correo} name="correo" />
+              </Form.Item>
 
-          <Form.Item
-            name="correo"
-            label="Correo"
-            rules={[
-              {
-                type: "email",
-                required: true,
-                message: "Ingrese un correo electrónico válido",
-              },
-            ]}
-          >
-            <Input className="input" />
-          </Form.Item>
+              <Form.Item
+                label="Teléfono"
+                name="telefono"
+                rules={[
+                  {
+                    required: true,
+                    message: "Ingrese su número de teléfono",
+                  },
+                ]}
+              >
+                <Input className="input" type="number" onChange={handleInputChange} value={form.telefono} name="telefono" />
+              </Form.Item>
 
-          <Form.Item
-            label="Teléfono"
-            name="telefono"
-            rules={[
-              {
-                required: true,
-                message: "Ingrese su número de teléfono",
-              },
-            ]}
-          >
-            <Input className="input" />
-          </Form.Item>
-
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit" shape="round">
-              Actualizar
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-      )
-    )
-    }
+              <Form.Item {...tailLayout}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  shape="round"
+                  onClick={handleSubmit}
+                >
+                  Actualizar
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        ))}
     </>
   );
 };

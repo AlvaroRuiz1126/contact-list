@@ -5,13 +5,6 @@ export const UserContext = createContext();
 
 export const UserProvider = ({children}) => {
     const [users, setUsers] = useState([]);
-    // const [newUser, setNewUser] = useState({
-    //     nombre: '',
-    //     apellido: '',
-    //     cedula: '',
-    //     correo: '',
-    //     telefono: '',
-    // });
 
     useEffect(() => {
         usersServices().then((resp) => setUsers([...resp.users]));

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Input, Button } from 'antd';
-import { UserContext } from '../context/UserContext';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 import { usersServices } from '../services/userAPI';
+import Swal from 'sweetalert2';
 
 const layout = {
   labelCol: {
@@ -22,7 +22,7 @@ const tailLayout = {
 
 const UserCreateScreen = () => {
   const history = useHistory();
-  const [newUser, setNewUser] = useState({ 
+  const [form, setForm] = useState({ 
     nombre: '',
     apellido: '',
     cedula: '',
@@ -30,13 +30,11 @@ const UserCreateScreen = () => {
     telefono: ''
   });
 
-  const onFinish = (values) => {
-    const { nombre, apellido, cedula, correo, telefono } = values;
-    setNewUser({nombre, apellido, cedula, correo, telefono});
-
-    usersServices("new", newUser, "POST");
-    
-    console.log("Success:", values);
+  const handleInputChange = ({target}) => {
+    setForm({
+      ...form,
+      [target.name]: target.value
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -47,12 +45,26 @@ const UserCreateScreen = () => {
     history.push("/");
   };
 
-  console.log(newUser);
+  const handleSubmit = () => {
+    usersServices("new", form, "POST").then(resp => {
+      if(resp.ok){
+        Swal.fire('Hecho!', resp.msg, 'success')
+      }else{
+        Swal.fire('Error!', resp.msg, 'error')
+      }
+    });
+  };
+
+  console.log(form);
 
   return (
     <>
       <div className="box">
-        <div><button className="btn-back" onClick={handleBack}><ArrowLeftOutlined /></button></div>
+        <div>
+          <button className="btn-back" onClick={handleBack}>
+            <ArrowLeftOutlined />
+          </button>
+        </div>
 
         <h2 style={{ textAlign: "center" }}>Crear un nuevo usuario</h2>
 
@@ -67,7 +79,6 @@ const UserCreateScreen = () => {
           initialValues={{
             remember: true,
           }}
-          onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
@@ -80,7 +91,7 @@ const UserCreateScreen = () => {
               },
             ]}
           >
-            <Input className="input" />
+            <Input className="input" name="nombre" onChange={handleInputChange} value={form.nombre} />
           </Form.Item>
 
           <Form.Item
@@ -93,7 +104,7 @@ const UserCreateScreen = () => {
               },
             ]}
           >
-            <Input className="input" />
+            <Input className="input" name="apellido" onChange={handleInputChange} value={form.apellido} />
           </Form.Item>
 
           <Form.Item
@@ -106,7 +117,7 @@ const UserCreateScreen = () => {
               },
             ]}
           >
-            <Input className="input" />
+            <Input className="input" type="number" name="cedula" onChange={handleInputChange} value={form.cedula} />
           </Form.Item>
 
           <Form.Item
@@ -120,7 +131,7 @@ const UserCreateScreen = () => {
               },
             ]}
           >
-            <Input className="input" />
+            <Input className="input" type="email" name="correo" onChange={handleInputChange} value={form.correo} />
           </Form.Item>
 
           <Form.Item
@@ -133,11 +144,11 @@ const UserCreateScreen = () => {
               },
             ]}
           >
-            <Input className="input" />
+            <Input className="input" type="number" name="telefono" onChange={handleInputChange} value={form.telefono} />
           </Form.Item>
 
           <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit" shape="round">
+            <Button type="primary" htmlType="submit" shape="round" onClick={handleSubmit}>
               Crear Usuario
             </Button>
           </Form.Item>

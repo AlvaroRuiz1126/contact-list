@@ -18,21 +18,4 @@ export const usersServices = async (endpoint = "", data, method = 'GET') => {
         
         return results;
     }
-
-    // if(method === "POST"){
-    // }
-
-    // if(method === "DELETE"){
-    //     const resp = await fetch(`${BASE_URL}/${endpoint}`, {
-    //         method,
-    //         headers: {
-    //             'Content-type': 'application/json'
-    //         },
-    //         body: data
-    //     });
-    //     const results = await resp.json();
-    //     console.log(results);
-
-    //     return results;
-    // }
 };
