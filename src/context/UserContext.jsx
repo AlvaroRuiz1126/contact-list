@@ -6,8 +6,8 @@ export const UserProvider = ({children}) => {
     const [newUser, setNewUser] = useState({
         nombre: '',
         apellido: '',
-        cedula: null,
-        email: '',
+        cedula: '',
+        correo: '',
         telefono: '',
     });
 

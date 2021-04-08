@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router';
+import { usersServices } from '../services/userAPI';
 
 const UsersListScreen = () => {
-    const history = useHistory();
+  const [users, setUsers] = useState([]);
+  const history = useHistory();
 
-    const handleUpdate = () => {
-        console.log("Pagina de nuevo usuario");
-        history.push("/update")
-    };
+  const handleUpdate = (id) => {
+    //console.log("Pagina de nuevo usuario");
+    history.push("/update");
+  };
 
-    const handleDelete = () => {
-        console.log("Pagina de nuevo usuario");
-    };
+  const handleDelete = (id) => {
+    //console.log("Pagina de nuevo usuario");
+    //console.log(typeof id);
+    usersServices(id, {}, "DELETE").then(resp => console.log(resp));
+  };
 
-    const handleAdd = () => {
-        console.log("Pagina de nuevo usuario");
-        history.push("/new")
-    };
+  const handleAdd = () => {
+    //console.log("Pagina de nuevo usuario");
+    history.push("/new");
+  };
+
+  useEffect(() => {
+    usersServices().then((resp) => setUsers([...resp.users]));
+  }, []);
+
+  console.log(users);
 
     return (
       <div className="box">
@@ -35,22 +45,24 @@ const UsersListScreen = () => {
             </thead>
 
             <tbody>
-              <tr>
-                <td>Alvaro</td>
-                <td>Ruiz</td>
-                <td>10000000</td>
-                <td>email@email.com</td>
-                <td>13017824932</td>
-                <td>
-                  <button className="btn-table" onClick={handleUpdate}>
-                    <EditOutlined />
-                  </button>
-                  <button className="btn-table" onClick={handleDelete}>
-                    <DeleteOutlined />
-                  </button>
-                </td>
-              </tr>
-              <tr>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.nombre}</td>
+                  <td>{user.apellido}</td>
+                  <td>{user.cedula}</td>
+                  <td>{user.correo}</td>
+                  <td>{user.telefono}</td>
+                  <td>
+                    <button className="btn-table" onClick={() => handleUpdate(user.id)}>
+                      <EditOutlined />
+                    </button>
+                    <button className="btn-table" onClick={() => handleDelete(user.id)}>
+                      <DeleteOutlined />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {/* <tr>
                 <td>Juan</td>
                 <td>Perez</td>
                 <td>1234556789</td>
@@ -64,7 +76,7 @@ const UsersListScreen = () => {
                     <DeleteOutlined />
                   </button>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>

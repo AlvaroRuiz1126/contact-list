@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { UserContext } from '../context/UserContext';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router';
+import { usersServices } from '../services/userAPI';
 
 const layout = {
   labelCol: {
@@ -24,8 +25,11 @@ const UserCreateScreen = () => {
   const {newUser, setNewUser} = useContext(UserContext);
 
   const onFinish = (values) => {
-    const { nombre, apellido, cedula, email, telefono } = values;
-    setNewUser({nombre, apellido, cedula, email, telefono});
+    const { nombre, apellido, cedula, correo, telefono } = values;
+    setNewUser({nombre, apellido, cedula, correo, telefono});
+
+    usersServices("new", newUser, "POST");
+    
     console.log("Success:", values);
   };
 
@@ -100,7 +104,7 @@ const UserCreateScreen = () => {
           </Form.Item>
 
           <Form.Item
-            name="email"
+            name="correo"
             label="Correo"
             rules={[
               {

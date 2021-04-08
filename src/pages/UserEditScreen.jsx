@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router';
+import { usersServices } from '../services/userAPI';
 
 const layout = {
   labelCol: {
@@ -32,6 +33,10 @@ const UserEditScreen = () => {
   const handleBack = () => {
     history.push("/");
   };
+
+  useEffect(() => {
+    usersServices();
+  }, []);
 
   return (
     <>
