@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Form, Input, Button } from 'antd';
 import { UserContext } from '../context/UserContext';
 import { ArrowLeftOutlined } from '@ant-design/icons';
@@ -22,7 +22,13 @@ const tailLayout = {
 
 const UserCreateScreen = () => {
   const history = useHistory();
-  const {newUser, setNewUser} = useContext(UserContext);
+  const [newUser, setNewUser] = useState({ 
+    nombre: '',
+    apellido: '',
+    cedula: '',
+    correo: '',
+    telefono: ''
+  });
 
   const onFinish = (values) => {
     const { nombre, apellido, cedula, correo, telefono } = values;

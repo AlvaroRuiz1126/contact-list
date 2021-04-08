@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router';
 import { usersServices } from '../services/userAPI';
+import { UserContext } from '../context/UserContext';
 
 const UsersListScreen = () => {
-  const [users, setUsers] = useState([]);
+  const {users, setUsers} = useContext(UserContext);
   const history = useHistory();
 
   const handleUpdate = (id) => {
-    //console.log("Pagina de nuevo usuario");
-    history.push("/update");
+    history.push(`/update/${id}`);
   };
 
   const handleDelete = (id) => {
-    //console.log("Pagina de nuevo usuario");
-    //console.log(typeof id);
     usersServices(id, {}, "DELETE").then(resp => console.log(resp));
   };
 
   const handleAdd = () => {
-    //console.log("Pagina de nuevo usuario");
     history.push("/new");
   };
 

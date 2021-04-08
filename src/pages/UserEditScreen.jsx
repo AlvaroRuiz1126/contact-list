@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form, Input, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { usersServices } from '../services/userAPI';
+import { UserContext } from '../context/UserContext';
 
 const layout = {
   labelCol: {
@@ -20,10 +21,24 @@ const tailLayout = {
 };
 
 const UserEditScreen = () => {
+  const [form, setForm] = useState({
+    nombre: '',
+    apellido: '',
+    cedula: '',
+    correo: '',
+    telefono: ''
+  });
+  const {users} = useContext(UserContext);
+  const {id} = useParams();
   const history = useHistory();
+  const user = users.filter(user => user.id === id);
 
   const onFinish = (values) => {
+    const { nombre, apellido, correo, cedula, telefono } = values;
     console.log("Success:", values);
+    setForm({ nombre, apellido, correo, cedula, telefono });
+
+    usersServices(id, form, "PUT").then(resp => console.log(resp));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -33,13 +48,12 @@ const UserEditScreen = () => {
   const handleBack = () => {
     history.push("/");
   };
-
-  useEffect(() => {
-    usersServices();
-  }, []);
-
+  
   return (
     <>
+    {user.length > 0 && (
+      user.map(field => 
+
       <div className="box">
         <div><button className="btn-back" onClick={handleBack}><ArrowLeftOutlined /></button></div>
         <h2 style={{ textAlign: "center" }}>Editar usuario</h2>
@@ -52,7 +66,11 @@ const UserEditScreen = () => {
           {...layout}
           name="basic"
           initialValues={{
-            remember: true,
+            'nombre': field.nombre,
+            'apellido': field.apellido,
+            'cedula': field.cedula,
+            'correo': field.correo,
+            'telefono': field.telefono
           }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -90,7 +108,6 @@ const UserEditScreen = () => {
               {
                 required: true,
                 message: "Ingrese su número de cédula",
-                type: "number",
               },
             ]}
           >
@@ -98,7 +115,7 @@ const UserEditScreen = () => {
           </Form.Item>
 
           <Form.Item
-            name={["user", "email"]}
+            name="correo"
             label="Correo"
             rules={[
               {
@@ -118,7 +135,6 @@ const UserEditScreen = () => {
               {
                 required: true,
                 message: "Ingrese su número de teléfono",
-                type: "number",
               },
             ]}
           >
@@ -132,6 +148,9 @@ const UserEditScreen = () => {
           </Form.Item>
         </Form>
       </div>
+      )
+    )
+    }
     </>
   );
 };

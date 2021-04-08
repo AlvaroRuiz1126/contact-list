@@ -16,7 +16,7 @@ const AppRouter = () => {
           <Switch>
             <Route exact path="/" component={UsersListScreen} />
             <Route exact path="/new" component={UserCreateScreen} />
-            <Route exact path="/update" component={UserEditScreen} />
+            <Route exact path="/update/:id" component={UserEditScreen} />
 
             <Redirect to="/" />
           </Switch>
