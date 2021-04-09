@@ -55,8 +55,6 @@ const UserCreateScreen = () => {
     });
   };
 
-  console.log(form);
-
   return (
     <>
       <div className="box">

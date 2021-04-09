@@ -10,6 +10,8 @@ export const UserProvider = ({children}) => {
         usersServices().then((resp) => setUsers([...resp.users]));
     }, []);
 
+    localStorage.setItem('users', JSON.stringify(users));
+
     return (
         <UserContext.Provider value={{ users, setUsers }} >
             {children}

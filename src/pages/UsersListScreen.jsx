@@ -25,9 +25,10 @@ const UsersListScreen = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        usersServices(id, {}, "DELETE").then((resp) =>
+        usersServices(id, {}, "DELETE").then((resp) => {
           Swal.fire("Eliminado!", resp.msg, "success")
-        );
+          window.location.reload();
+        });
       }
     });
   };
@@ -38,49 +39,55 @@ const UsersListScreen = () => {
 
   useEffect(() => {
     usersServices().then((resp) => setUsers([...resp.users]));
-  }, []);
+  }, [setUsers]);
 
   return (
     <div className="box">
-      <div className="content-table">
-        <table className="contacts-list">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Cédula</th>
-              <th>Correo</th>
-              <th>Teléfono</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
+      <h2 className="title-list">Lista de Contactos</h2>
 
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.nombre}</td>
-                <td>{user.apellido}</td>
-                <td>{user.cedula}</td>
-                <td>{user.correo}</td>
-                <td>{user.telefono}</td>
-                <td>
-                  <button
-                    className="btn-table"
-                    onClick={() => handleUpdate(user.id)}
-                  >
-                    <EditOutlined />
-                  </button>
-                  <button
-                    className="btn-table"
-                    onClick={() => handleDelete(user.id)}
-                  >
-                    <DeleteOutlined />
-                  </button>
-                </td>
+      <div className="content-table center">
+        {users.length > 0 ? (
+          <table className="contacts-list">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Cédula</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.nombre}</td>
+                  <td>{user.apellido}</td>
+                  <td>{user.cedula}</td>
+                  <td>{user.correo}</td>
+                  <td>{user.telefono}</td>
+                  <td>
+                    <button
+                      className="btn-table"
+                      onClick={() => handleUpdate(user.id)}
+                    >
+                      <EditOutlined />
+                    </button>
+                    <button
+                      className="btn-table"
+                      onClick={() => handleDelete(user.id)}
+                    >
+                      <DeleteOutlined />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No hay usuarios registrados hasta el momento</p>
+        )}
       </div>
 
       <div className="btn-add">
