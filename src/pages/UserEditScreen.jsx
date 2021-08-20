@@ -1,9 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { 
+  //useContext,
+  useEffect, 
+  useState 
+} from 'react';
 import { Form, Input, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useHistory, useParams } from 'react-router';
 import { usersServices } from '../services/userAPI';
-import { UserContext } from '../context/UserContext';
+//import { UserContext } from '../context/UserContext';
 import Swal from 'sweetalert2';
 
 const layout = {
@@ -21,6 +25,8 @@ const tailLayout = {
   },
 };
 
+const users = JSON.parse(localStorage.getItem('users'));
+
 const UserEditScreen = () => {
   const [form, setForm] = useState({
     nombre: '',
@@ -29,7 +35,7 @@ const UserEditScreen = () => {
     correo: '',
     telefono: ''
   });
-  const {users} = useContext(UserContext);
+  //const {users} = useContext(UserContext);
   const {id} = useParams();
   const history = useHistory();
   const user = users?.find(user => user.id === id);
